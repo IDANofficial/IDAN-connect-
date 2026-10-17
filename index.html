@@ -130,7 +130,7 @@
         </label>
         <button type="submit" class="primary-btn" id="createAccountButton">Create Account</button>
         <button type="button" class="secondary-btn" onclick="showSection('discover')">Back to Discover</button>
-        <p class="small-note">Your email and password are handled by Firebase Authentication. This prototype does not yet save your dating profile, matches, or chats to a database.</p>
+        <p class="small-note">Your email and password are handled by Firebase Authentication. Your profile details will be saved to your IDAN Connect account.</p>
       </form>
       <div id="signupMessage" role="status" aria-live="polite"></div>
     </section>
@@ -209,6 +209,8 @@
       .then(function(appModule) {
         return import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js")
           .then(function(authModule) {
+            return import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
+              .then(function(firestoreModule) {
             const firebaseConfig = {
               apiKey: "AIzaSyDX-K0qY9Pq1y7F5mUno3MNPMgEw7aC32A",
               authDomain: "idan-connect-b3a7a.firebaseapp.com",
@@ -222,6 +224,10 @@
             const auth = authModule.getAuth(app);
             const createUserWithEmailAndPassword = authModule.createUserWithEmailAndPassword;
             const updateProfile = authModule.updateProfile;
+            const db = firestoreModule.getFirestore(app);
+            const doc = firestoreModule.doc;
+            const setDoc = firestoreModule.setDoc;
+            const serverTimestamp = firestoreModule.serverTimestamp;
 
             document.getElementById("signupForm").addEventListener("submit", async function(event) {
               event.preventDefault();
@@ -231,6 +237,9 @@
               const email = document.getElementById("email").value.trim();
               const password = document.getElementById("password").value;
               const age = Number(document.getElementById("age").value);
+              const country = document.getElementById("country").value.trim();
+              const gender = document.getElementById("gender").value;
+              const lookingFor = document.getElementById("lookingFor").value;
 
               message.style.color = "#c62828";
               if (age < 18) {
@@ -252,8 +261,22 @@
               try {
                 const credential = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(credential.user, { displayName: fullName });
+
+                // Save the profile under the authenticated user's UID.
+                await setDoc(doc(db, "users", credential.user.uid), {
+                  uid: credential.user.uid,
+                  name: fullName,
+                  email: credential.user.email,
+                  age: age,
+                  country: country,
+                  gender: gender,
+                  lookingFor: lookingFor,
+                  createdAt: serverTimestamp(),
+                  updatedAt: serverTimestamp()
+                });
+
                 message.style.color = "#168449";
-                message.textContent = "Account created successfully! Your email account is registered. Saving your dating profile and building matches/chats are the next steps.";
+                message.textContent = "Account and profile created successfully! Your IDAN Connect profile has been saved.";
                 document.getElementById("signupForm").reset();
               } catch (error) {
                 message.style.color = "#c62828";
@@ -263,6 +286,7 @@
                 button.textContent = "Create Account";
               }
             });
+              });
           });
       })
       .catch(function(error) {
@@ -273,4 +297,5 @@
       });
   </script>
 </body>
-</html>
+        </html>
+  
