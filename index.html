@@ -1,301 +1,505 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IDAN Connect</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; background: #f5f7fb; color: #172033; font-family: Arial, sans-serif; }
-    header { background: white; padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; border-bottom: 1px solid #e8ebf1; }
-    .logo { font-size: 22px; font-weight: bold; color: #246bfd; }
-    .tagline { font-size: 11px; color: #7b8495; margin-top: 4px; }
-    .signup-top { background: #246bfd; color: white; border: none; padding: 10px 12px; border-radius: 10px; font-weight: bold; font-size: 12px; white-space: nowrap; }
-    main { max-width: 430px; margin: auto; padding: 18px 16px 100px; }
-    .heading { margin: 8px 0 5px; font-size: 25px; }
-    .subtitle { color: #7b8495; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-    .profile-card { background: white; border-radius: 22px; overflow: hidden; box-shadow: 0 5px 22px #1720330c; }
-    .photo { width: 100%; height: 350px; position: relative; background: #e4eaf4; }
-    .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .distance, .online { position: absolute; background: #ffffffed; padding: 8px 11px; border-radius: 20px; font-size: 12px; }
-    .distance { top: 14px; left: 14px; }
-    .online { bottom: 14px; left: 14px; }
-    .details { padding: 18px; }
-    .name { font-size: 24px; font-weight: bold; margin: 0; }
-    .location { color: #788295; font-size: 13px; margin-top: 7px; }
-    .bio { color: #515c70; font-size: 14px; line-height: 1.6; margin: 15px 0; }
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag { background: #eef3ff; color: #285bc1; border-radius: 18px; padding: 8px 11px; font-size: 12px; }
-    .actions { display: flex; gap: 14px; margin: 18px 0; }
-    button { font-family: Arial, sans-serif; cursor: pointer; }
-    .pass, .like { flex: 1; padding: 15px; border-radius: 14px; border: none; font-size: 15px; font-weight: bold; }
-    .pass { background: white; color: #596579; border: 1px solid #dfe4ed; }
-    .like { background: #246bfd; color: white; }
-    #message { text-align: center; color: #246bfd; font-size: 14px; min-height: 20px; margin-bottom: 18px; line-height: 1.5; }
-    .section { display: none; background: white; padding: 22px; border-radius: 18px; margin-top: 12px; line-height: 1.6; }
-    .section h2 { margin-top: 0; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 7px; }
-    .form-group input, .form-group select { width: 100%; padding: 13px; border: 1px solid #dfe4ed; border-radius: 10px; background: white; color: #172033; font-size: 14px; }
-    .form-group input:focus, .form-group select:focus { outline: 2px solid #b9d0ff; border-color: #246bfd; }
-    .checkbox-row { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.5; margin: 18px 0; }
-    .checkbox-row input { margin-top: 4px; }
-    .primary-btn { width: 100%; padding: 14px; background: #246bfd; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; }
-    .secondary-btn { width: 100%; padding: 12px; background: white; color: #246bfd; border: 1px solid #dfe4ed; border-radius: 12px; margin-top: 10px; font-size: 14px; font-weight: bold; }
-    .small-note { color: #7b8495; font-size: 12px; line-height: 1.6; }
-    #signupMessage { margin-top: 14px; font-size: 14px; overflow-wrap: anywhere; }
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-around; background: white; border-top: 1px solid #e8ebf1; padding: 12px 4px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
-    .nav-btn { background: transparent; border: none; color: #7b8495; font-size: 11px; padding: 5px; }
-    .nav-btn span { display: block; font-size: 20px; margin-bottom: 5px; }
-    .nav-btn.active { color: #246bfd; }
-    .note { text-align: center; color: #8992a1; font-size: 11px; line-height: 1.5; margin-top: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDAN Connect</title>
+
+<style>
+:root {
+  --blue: #246bfd;
+  --ink: #172033;
+  --muted: #667085;
+  --bg: #f5f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #fff;
+  border-bottom: 1px solid #e8ebf2;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.tagline,
+.muted {
+  color: var(--muted);
+  font-size: .9rem;
+  margin-top: 4px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+}
+
+.primary-btn {
+  background: var(--blue);
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.secondary-btn {
+  background: #edf2ff;
+  color: var(--blue);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.header-btn {
+  background: var(--blue);
+  color: #fff;
+}
+
+main {
+  max-width: 620px;
+  margin: auto;
+  padding: 18px 14px 100px;
+}
+
+.section {
+  display: none;
+  background: #fff;
+  border: 1px solid #e7eaf1;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.section.active {
+  display: block;
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.profile-card {
+  border-radius: 18px;
+  padding: 22px;
+  min-height: 240px;
+  background: linear-gradient(145deg, #e9f0ff, #f8eaff);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.tags {
+  display: flex;
+  gap: 7px;
+  margin: 10px 0 15px;
+}
+
+.tag {
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: .82rem;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  flex: 1;
+}
+
+.pass {
+  background: #eef1f6;
+}
+
+.like {
+  background: var(--blue);
+  color: #fff;
+}
+
+.form-group {
+  margin: 14px 0;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  font-size: .92rem;
+  margin-bottom: 7px;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid #d5dae5;
+  border-radius: 11px;
+  padding: 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 16px 0;
+}
+
+.checkbox-row input {
+  width: auto;
+  margin-top: 3px;
+}
+
+.small-note,
+.note {
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+#signupMessage {
+  margin-top: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.switch-auth {
+  text-align: center;
+  margin-top: 15px;
+  font-size: .92rem;
+}
+
+.text-button {
+  color: var(--blue);
+  background: none;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: #fff;
+  border-top: 1px solid #e7eaf1;
+  padding: 8px 3px;
+  z-index: 3;
+}
+
+.nav-btn {
+  background: transparent;
+  color: #7a8498;
+  padding: 7px 9px;
+  font-size: .76rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.nav-btn span {
+  font-size: 1.25rem;
+}
+
+.nav-btn.active {
+  color: var(--blue);
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <div>
-      <div class="logo">IDAN Connect</div>
-      <div class="tagline">Real connections start here.</div>
-    </div>
-    <button class="signup-top" type="button" onclick="showSignup()">Sign Up</button>
-  </header>
 
-  <main>
-    <div id="discover">
-      <h1 class="heading">Discover people</h1>
-      <div class="subtitle">Your next connection could be anywhere.</div>
-      <div class="profile-card">
-        <div class="photo">
-          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85" alt="Sample dating profile">
-          <div class="distance">🌍 Worldwide</div>
-          <div class="online">● Sample profile</div>
-        </div>
-        <div class="details">
-          <h2 class="name">Alex, 23</h2>
-          <div class="location">📍 Sample location · Open to meeting people worldwide</div>
-          <p class="bio">I enjoy music, traveling, good conversations, and meeting people with positive energy. Looking for a genuine connection.</p>
-          <div class="tags"><span class="tag">🎵 Music</span><span class="tag">✈️ Travel</span><span class="tag">☕ Coffee</span></div>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="pass" type="button" onclick="passProfile()">✕ Pass</button>
-        <button class="like" type="button" onclick="likeProfile()">♥ Like</button>
-      </div>
-      <div id="message" aria-live="polite">Discover profiles and choose who interests you.</div>
-      <button class="primary-btn" type="button" onclick="showSignup()">Create Your Account</button>
+<header>
+  <div>
+    <div class="brand">IDAN Connect 💙</div>
+    <div class="tagline">Real connections start here.</div>
+  </div>
+
+  <button class="header-btn" onclick="showSignup()">
+    Sign Up
+  </button>
+</header>
+
+<main>
+
+<section class="section active" id="discover">
+  <h1>Discover people</h1>
+
+  <p class="muted">
+    Your next connection could be anywhere.
+  </p>
+
+  <div class="profile-card">
+    <div class="muted">Worldwide · Sample profile</div>
+    <h2>Alex, 23</h2>
+
+    <div>Looking for genuine connections.</div>
+
+    <div class="tags">
+      <span class="tag">Music</span>
+      <span class="tag">Travel</span>
+      <span class="tag">Coffee</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="pass" onclick="passProfile()">Pass</button>
+    <button class="like" onclick="likeProfile()">♡ Like</button>
+  </div>
+
+  <p id="message" class="small-note"></p>
+
+  <button class="primary-btn" onclick="showSignup()">
+    Create your account
+  </button>
+</section>
+
+<section class="section" id="signup">
+
+  <h2 id="authTitle">Create your account</h2>
+
+  <p class="muted" id="authSubtitle">
+    Join IDAN Connect and meet people worldwide.
+  </p>
+
+  <form id="signupForm">
+
+    <div class="form-group" id="nameGroup">
+      <label for="fullName">Full name</label>
+      <input
+        id="fullName"
+        autocomplete="name"
+        maxlength="80"
+        required
+      >
     </div>
 
-    <section class="section" id="signup">
-      <h2>Create your account 💙</h2>
-      <p>Welcome to IDAN Connect! Start by telling us a little about yourself.</p>
-      <form id="signupForm">
-        <div class="form-group">
-          <label for="fullName">Full name</label>
-          <input type="text" id="fullName" placeholder="Enter your full name" required maxlength="80" autocomplete="name">
-        </div>
-        <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" id="email" placeholder="Enter your email address" required autocomplete="email">
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
-        </div>
-        <div class="form-group">
-          <label for="age">Age</label>
-          <input type="number" id="age" placeholder="You must be 18 or older" min="18" max="120" required>
-        </div>
-        <div class="form-group">
-          <label for="country">Country</label>
-          <input type="text" id="country" placeholder="Enter your country" required maxlength="80" autocomplete="country-name">
-        </div>
-        <div class="form-group">
-          <label for="gender">Gender</label>
-          <select id="gender" required>
-            <option value="">Select your gender</option>
-            <option value="Woman">Woman</option><option value="Man">Man</option>
-            <option value="Non-binary">Non-binary</option><option value="Prefer not to say">Prefer not to say</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="lookingFor">Who would you like to meet?</label>
-          <select id="lookingFor" required>
-            <option value="">Choose your preference</option>
-            <option value="Women">Women</option><option value="Men">Men</option><option value="Everyone">Everyone</option>
-          </select>
-        </div>
-        <label class="checkbox-row">
-          <input type="checkbox" id="adultConfirm" required>
-          <span>I confirm that I am at least 18 years old and agree to use IDAN Connect respectfully.</span>
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="email"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="password">
+        Password (at least 6 characters)
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="new-password"
+        minlength="6"
+        required
+      >
+    </div>
+
+    <div id="profileFields">
+
+      <div class="form-group">
+        <label for="age">Age (18 or older)</label>
+        <input
+          id="age"
+          type="number"
+          min="18"
+          max="120"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+        <input
+          id="country"
+          maxlength="80"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender</label>
+
+        <select id="gender" required>
+          <option value="">Choose your gender</option>
+          <option>Woman</option>
+          <option>Man</option>
+          <option>Non-binary</option>
+          <option>Prefer not to say</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="lookingFor">
+          Who would you like to meet?
         </label>
-        <button type="submit" class="primary-btn" id="createAccountButton">Create Account</button>
-        <button type="button" class="secondary-btn" onclick="showSection('discover')">Back to Discover</button>
-        <p class="small-note">Your email and password are handled by Firebase Authentication. Your profile details will be saved to your IDAN Connect account.</p>
-      </form>
-      <div id="signupMessage" role="status" aria-live="polite"></div>
-    </section>
 
-    <section class="section" id="matches">
-      <h2>Your matches 💙</h2>
-      <p>Profiles you mutually like will appear here when real matching is implemented.</p>
-    </section>
-    <section class="section" id="chats">
-      <h2>Your messages 💬</h2>
-      <p>Your conversations will appear here after messaging is implemented.</p>
-    </section>
-    <section class="section" id="profile">
-      <h2>Your profile 👤</h2>
-      <p><strong>IDAN Connect</strong></p>
-      <p>This is your profile area. Full profile storage and editing will be added later.</p>
-      <button class="primary-btn" type="button" onclick="showSignup()">Sign Up</button>
-    </section>
-    <div class="note">Demo only. Alex is a sample profile. Real matching and messaging are not implemented yet.</div>
-  </main>
+        <select id="lookingFor" required>
+          <option value="">Choose your preference</option>
+          <option>Women</option>
+          <option>Men</option>
+          <option>Everyone</option>
+        </select>
+      </div>
 
-  <nav class="bottom-nav">
-    <button class="nav-btn active" type="button" onclick="showSection('discover', this)"><span>⌕</span>Discover</button>
-    <button class="nav-btn" type="button" onclick="showSection('matches', this)"><span>♡</span>Matches</button>
-    <button class="nav-btn" type="button" onclick="showSection('chats', this)"><span>▤</span>Chats</button>
-    <button class="nav-btn" type="button" onclick="showSection('profile', this)"><span>♙</span>Profile</button>
+      <label class="checkbox-row">
+        <input type="checkbox" id="adultConfirm" required>
+
+        <span>
+          I confirm that I am at least 18 years old and agree
+          to use IDAN Connect respectfully.
+        </span>
+      </label>
+
+    </div>
+
+    <button
+      type="submit"
+      class="primary-btn"
+      id="authSubmit"
+    >
+      Create Account
+    </button>
+
+    <button
+      type="button"
+      class="secondary-btn"
+      onclick="showSection('discover')"
+    >
+      Back to Discover
+    </button>
+
+  </form>
+
+  <p class="switch-auth" id="authSwitch">
+    Already have an account?
+    <button
+      class="text-button"
+      type="button"
+      onclick="showSignin()"
+    >
+      Sign in instead
+    </button>
+  </p>
+
+  <div id="signupMessage" role="status" aria-live="polite"></div>
+
+  <p class="small-note">
+    Your password is handled by Firebase Authentication.
+    Never share it with anyone.
+  </p>
+
+</section>
+
+<section class="section" id="matches">
+  <h2>Your matches 💙</h2>
+  <p>
+    Profiles you mutually like will appear here when matching
+    is implemented.
+  </p>
+</section>
+
+<section class="section" id="chats">
+  <h2>Your messages 💬</h2>
+  <p>
+    Your conversations will appear here after messaging
+    is implemented.
+  </p>
+</section>
+
+<section class="section" id="profile">
+  <h2>Your profile 👤</h2>
+
+  <p id="profileStatus">
+    <strong>IDAN Connect</strong><br>
+    Sign in to view your account.
+  </p>
+
+  <button class="primary-btn" onclick="showSignup()">
+    Sign Up
+  </button>
+
+  <button class="secondary-btn" onclick="showSignin()">
+    Sign In
+  </button>
+
+  <button
+    class="secondary-btn"
+    id="signoutButton"
+    style="display:none"
+    onclick="signOutUser()"
+  >
+    Sign Out
+  </button>
+</section>
+
+<div class="note">
+  Prototype: Alex is a sample profile. Real matching and
+  messaging are not implemented yet.
+</div>
+
+</main>
+
+<nav class="bottom-nav">
+  <button
+    class="nav-btn active"
+    onclick="showSection('discover',this)"
+  >
+    <span>⌕</span>Discover
+  </button>
+
+  <button
+    class="nav-btn"
+    onclick="showSection('matches',this)"
+  >
+    <span>♡</span>Matches
+  </button>
+
+  <button
+    class="nav-btn"
+    onclick="showSection('chats',this)"
+  >
+    <span>▤</span>Chats
+  </button>
+
+  <button
+    class="nav-btn"
+    onclick="showSection('profile',this)"
+  >
+    <span>♙</span>Profile
+  </button>
   </nav>
-
-  <script>
-    function likeProfile() {
-      document.getElementById("message").textContent = "You liked Alex! Real matching comes next.";
-    }
-
-    function passProfile() {
-      document.getElementById("message").textContent = "You passed this sample profile.";
-    }
-
-    function showSection(sectionId, button) {
-      ["discover", "signup", "matches", "chats", "profile"].forEach(function(id) {
-        const element = document.getElementById(id);
-        if (element) element.style.display = id === sectionId ? "block" : "none";
-      });
-      document.querySelectorAll(".nav-btn").forEach(function(navButton) {
-        navButton.classList.remove("active");
-      });
-      if (button) {
-        button.classList.add("active");
-      } else {
-        const matchingButton = document.querySelector('.nav-btn[onclick*="' + sectionId + '"]');
-        if (matchingButton) matchingButton.classList.add("active");
-      }
-      window.scrollTo(0, 0);
-    }
-
-    function showSignup() {
-      showSection("signup");
-      document.getElementById("signupMessage").textContent = "";
-    }
-
-    function firebaseErrorMessage(errorCode) {
-      const messages = {
-        "auth/email-already-in-use": "That email already has an account. Try signing in instead.",
-        "auth/invalid-email": "Please enter a valid email address.",
-        "auth/weak-password": "Please choose a stronger password with at least 6 characters.",
-        "auth/operation-not-allowed": "Email/password sign-up is not enabled in Firebase Authentication.",
-        "auth/network-request-failed": "Network error. Check your internet connection and try again.",
-        "auth/too-many-requests": "Too many attempts. Please wait a while and try again.",
-        "auth/invalid-api-key": "Firebase configuration issue: check the API key in the code.",
-        "auth/configuration-not-found": "Firebase Authentication configuration is incomplete. Check that Email/Password is enabled."
-      };
-      return messages[errorCode] || ("Could not create the account (" + errorCode + "). Check your connection and Firebase settings, then try again.");
-    }
-
-    // Firebase modules are loaded from Google's CDN. The page must be hosted on a supported web origin to test sign-up.
-    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js")
-      .then(function(appModule) {
-        return import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js")
-          .then(function(authModule) {
-            return import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
-              .then(function(firestoreModule) {
-            const firebaseConfig = {
-              apiKey: "AIzaSyDX-K0qY9Pq1y7F5mUno3MNPMgEw7aC32A",
-              authDomain: "idan-connect-b3a7a.firebaseapp.com",
-              projectId: "idan-connect-b3a7a",
-              storageBucket: "idan-connect-b3a7a.firebasestorage.app",
-              messagingSenderId: "202255636306",
-              appId: "1:202255636306:web:57b480f4e60ae17a744c8b",
-              measurementId: "G-TW6N56B5Z7"
-            };
-            const app = appModule.initializeApp(firebaseConfig);
-            const auth = authModule.getAuth(app);
-            const createUserWithEmailAndPassword = authModule.createUserWithEmailAndPassword;
-            const updateProfile = authModule.updateProfile;
-            const db = firestoreModule.getFirestore(app);
-            const doc = firestoreModule.doc;
-            const setDoc = firestoreModule.setDoc;
-            const serverTimestamp = firestoreModule.serverTimestamp;
-
-            document.getElementById("signupForm").addEventListener("submit", async function(event) {
-              event.preventDefault();
-              const message = document.getElementById("signupMessage");
-              const button = document.getElementById("createAccountButton");
-              const fullName = document.getElementById("fullName").value.trim();
-              const email = document.getElementById("email").value.trim();
-              const password = document.getElementById("password").value;
-              const age = Number(document.getElementById("age").value);
-              const country = document.getElementById("country").value.trim();
-              const gender = document.getElementById("gender").value;
-              const lookingFor = document.getElementById("lookingFor").value;
-
-              message.style.color = "#c62828";
-              if (age < 18) {
-                message.textContent = "You must be at least 18 to use IDAN Connect.";
-                return;
-              }
-              if (!document.getElementById("adultConfirm").checked) {
-                message.textContent = "Please confirm that you are at least 18 years old.";
-                return;
-              }
-              if (password.length < 6) {
-                message.textContent = "Your password must contain at least 6 characters.";
-                return;
-              }
-
-              button.disabled = true;
-              button.textContent = "Creating account...";
-              message.textContent = "Connecting securely to Firebase...";
-              try {
-                const credential = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(credential.user, { displayName: fullName });
-
-                // Save the profile under the authenticated user's UID.
-                await setDoc(doc(db, "users", credential.user.uid), {
-                  uid: credential.user.uid,
-                  name: fullName,
-                  email: credential.user.email,
-                  age: age,
-                  country: country,
-                  gender: gender,
-                  lookingFor: lookingFor,
-                  createdAt: serverTimestamp(),
-                  updatedAt: serverTimestamp()
-                });
-
-                message.style.color = "#168449";
-                message.textContent = "Account and profile created successfully! Your IDAN Connect profile has been saved.";
-                document.getElementById("signupForm").reset();
-              } catch (error) {
-                message.style.color = "#c62828";
-                message.textContent = firebaseErrorMessage(error.code || "unknown-error");
-              } finally {
-                button.disabled = false;
-                button.textContent = "Create Account";
-              }
-            });
-              });
-          });
-      })
-      .catch(function(error) {
-        console.error("Firebase failed to load:", error);
-        const message = document.getElementById("signupMessage");
-        message.style.color = "#c62828";
-        message.textContent = "Firebase could not load. Open this page while connected to the internet from a hosted website, then try again.";
-      });
-  </script>
-</body>
-        </html>
-  
