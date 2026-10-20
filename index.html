@@ -1,505 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IDAN Connect</title>
+<script>
+function showSection(sectionId, button) {
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
 
-<style>
-:root {
-  --blue: #246bfd;
-  --ink: #172033;
-  --muted: #667085;
-  --bg: #f5f7fb;
+  const section = document.getElementById(sectionId);
+
+  if (section) {
+    section.classList.add('active');
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(nav => {
+    nav.classList.remove('active');
+  });
+
+  if (button) {
+    button.classList.add('active');
+  }
 }
 
-* {
-  box-sizing: border-box;
+function showSignup() {
+  showSection('signup');
+
+  document.getElementById('authTitle').textContent =
+    'Create your account';
+
+  document.getElementById('authSubtitle').textContent =
+    'Join IDAN Connect and meet people worldwide.';
+
+  document.getElementById('nameGroup').style.display = 'block';
+  document.getElementById('profileFields').style.display = 'block';
+
+  document.getElementById('authSubmit').textContent =
+    'Create Account';
+
+  document.getElementById('signupMessage').textContent = '';
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: var(--ink);
-  background: var(--bg);
+function showSignin() {
+  showSection('signup');
+
+  document.getElementById('authTitle').textContent =
+    'Welcome back';
+
+  document.getElementById('authSubtitle').textContent =
+    'Sign in to your IDAN Connect account.';
+
+  document.getElementById('nameGroup').style.display = 'none';
+  document.getElementById('profileFields').style.display = 'none';
+
+  document.getElementById('authSubmit').textContent = 'Sign In';
+
+  document.getElementById('signupMessage').textContent =
+    'Online sign-in will be enabled after authentication is connected.';
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  background: #fff;
-  border-bottom: 1px solid #e8ebf2;
-  position: sticky;
-  top: 0;
+function passProfile() {
+  document.getElementById('message').textContent =
+    'You passed this sample profile.';
 }
 
-.brand {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--blue);
+function likeProfile() {
+  document.getElementById('message').textContent =
+    'You liked this sample profile.';
 }
 
-.tagline,
-.muted {
-  color: var(--muted);
-  font-size: .9rem;
-  margin-top: 4px;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-  border: 0;
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-weight: 700;
-}
-
-.primary-btn {
-  background: var(--blue);
-  color: white;
-  width: 100%;
-  margin-top: 10px;
-}
-
-.secondary-btn {
-  background: #edf2ff;
-  color: var(--blue);
-  width: 100%;
-  margin-top: 10px;
-}
-
-.header-btn {
-  background: var(--blue);
-  color: #fff;
-}
-
-main {
-  max-width: 620px;
-  margin: auto;
-  padding: 18px 14px 100px;
-}
-
-.section {
-  display: none;
-  background: #fff;
-  border: 1px solid #e7eaf1;
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-.section.active {
-  display: block;
-}
-
-h1 {
-  font-size: 1.6rem;
-}
-
-p {
-  line-height: 1.5;
-}
-
-.profile-card {
-  border-radius: 18px;
-  padding: 22px;
-  min-height: 240px;
-  background: linear-gradient(145deg, #e9f0ff, #f8eaff);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-.tags {
-  display: flex;
-  gap: 7px;
-  margin: 10px 0 15px;
-}
-
-.tag {
-  background: #fff;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: .82rem;
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
-.actions button {
-  flex: 1;
-}
-
-.pass {
-  background: #eef1f6;
-}
-
-.like {
-  background: var(--blue);
-  color: #fff;
-}
-
-.form-group {
-  margin: 14px 0;
-}
-
-label {
-  display: block;
-  font-weight: 700;
-  font-size: .92rem;
-  margin-bottom: 7px;
-}
-
-input,
-select {
-  width: 100%;
-  border: 1px solid #d5dae5;
-  border-radius: 11px;
-  padding: 12px;
-  font: inherit;
-  background: #fff;
-}
-
-.checkbox-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  font-weight: 400;
-  line-height: 1.4;
-  margin: 16px 0;
-}
-
-.checkbox-row input {
-  width: auto;
-  margin-top: 3px;
-}
-
-.small-note,
-.note {
-  font-size: .8rem;
-  color: var(--muted);
-}
-
-#signupMessage {
-  margin-top: 12px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
-.switch-auth {
-  text-align: center;
-  margin-top: 15px;
-  font-size: .92rem;
-}
-
-.text-button {
-  color: var(--blue);
-  background: none;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  background: #fff;
-  border-top: 1px solid #e7eaf1;
-  padding: 8px 3px;
-  z-index: 3;
-}
-
-.nav-btn {
-  background: transparent;
-  color: #7a8498;
-  padding: 7px 9px;
-  font-size: .76rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-
-.nav-btn span {
-  font-size: 1.25rem;
-}
-
-.nav-btn.active {
-  color: var(--blue);
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <div>
-    <div class="brand">IDAN Connect 💙</div>
-    <div class="tagline">Real connections start here.</div>
-  </div>
-
-  <button class="header-btn" onclick="showSignup()">
-    Sign Up
-  </button>
-</header>
-
-<main>
-
-<section class="section active" id="discover">
-  <h1>Discover people</h1>
-
-  <p class="muted">
-    Your next connection could be anywhere.
-  </p>
-
-  <div class="profile-card">
-    <div class="muted">Worldwide · Sample profile</div>
-    <h2>Alex, 23</h2>
-
-    <div>Looking for genuine connections.</div>
-
-    <div class="tags">
-      <span class="tag">Music</span>
-      <span class="tag">Travel</span>
-      <span class="tag">Coffee</span>
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="pass" onclick="passProfile()">Pass</button>
-    <button class="like" onclick="likeProfile()">♡ Like</button>
-  </div>
-
-  <p id="message" class="small-note"></p>
-
-  <button class="primary-btn" onclick="showSignup()">
-    Create your account
-  </button>
-</section>
-
-<section class="section" id="signup">
-
-  <h2 id="authTitle">Create your account</h2>
-
-  <p class="muted" id="authSubtitle">
-    Join IDAN Connect and meet people worldwide.
-  </p>
-
-  <form id="signupForm">
-
-    <div class="form-group" id="nameGroup">
-      <label for="fullName">Full name</label>
-      <input
-        id="fullName"
-        autocomplete="name"
-        maxlength="80"
-        required
-      >
-    </div>
-
-    <div class="form-group">
-      <label for="email">Email address</label>
-      <input
-        id="email"
-        type="email"
-        autocomplete="email"
-        required
-      >
-    </div>
-
-    <div class="form-group">
-      <label for="password">
-        Password (at least 6 characters)
-      </label>
-
-      <input
-        id="password"
-        type="password"
-        autocomplete="new-password"
-        minlength="6"
-        required
-      >
-    </div>
-
-    <div id="profileFields">
-
-      <div class="form-group">
-        <label for="age">Age (18 or older)</label>
-        <input
-          id="age"
-          type="number"
-          min="18"
-          max="120"
-          required
-        >
-      </div>
-
-      <div class="form-group">
-        <label for="country">Country</label>
-        <input
-          id="country"
-          maxlength="80"
-          required
-        >
-      </div>
-
-      <div class="form-group">
-        <label for="gender">Gender</label>
-
-        <select id="gender" required>
-          <option value="">Choose your gender</option>
-          <option>Woman</option>
-          <option>Man</option>
-          <option>Non-binary</option>
-          <option>Prefer not to say</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="lookingFor">
-          Who would you like to meet?
-        </label>
-
-        <select id="lookingFor" required>
-          <option value="">Choose your preference</option>
-          <option>Women</option>
-          <option>Men</option>
-          <option>Everyone</option>
-        </select>
-      </div>
-
-      <label class="checkbox-row">
-        <input type="checkbox" id="adultConfirm" required>
-
-        <span>
-          I confirm that I am at least 18 years old and agree
-          to use IDAN Connect respectfully.
-        </span>
-      </label>
-
-    </div>
-
-    <button
-      type="submit"
-      class="primary-btn"
-      id="authSubmit"
-    >
-      Create Account
-    </button>
-
-    <button
-      type="button"
-      class="secondary-btn"
-      onclick="showSection('discover')"
-    >
-      Back to Discover
-    </button>
-
-  </form>
-
-  <p class="switch-auth" id="authSwitch">
-    Already have an account?
-    <button
-      class="text-button"
-      type="button"
-      onclick="showSignin()"
-    >
-      Sign in instead
-    </button>
-  </p>
-
-  <div id="signupMessage" role="status" aria-live="polite"></div>
-
-  <p class="small-note">
-    Your password is handled by Firebase Authentication.
-    Never share it with anyone.
-  </p>
-
-</section>
-
-<section class="section" id="matches">
-  <h2>Your matches 💙</h2>
-  <p>
-    Profiles you mutually like will appear here when matching
-    is implemented.
-  </p>
-</section>
-
-<section class="section" id="chats">
-  <h2>Your messages 💬</h2>
-  <p>
-    Your conversations will appear here after messaging
-    is implemented.
-  </p>
-</section>
-
-<section class="section" id="profile">
-  <h2>Your profile 👤</h2>
-
-  <p id="profileStatus">
-    <strong>IDAN Connect</strong><br>
-    Sign in to view your account.
-  </p>
-
-  <button class="primary-btn" onclick="showSignup()">
-    Sign Up
-  </button>
-
-  <button class="secondary-btn" onclick="showSignin()">
-    Sign In
-  </button>
-
-  <button
-    class="secondary-btn"
-    id="signoutButton"
-    style="display:none"
-    onclick="signOutUser()"
-  >
-    Sign Out
-  </button>
-</section>
-
-<div class="note">
-  Prototype: Alex is a sample profile. Real matching and
-  messaging are not implemented yet.
-</div>
-
-</main>
-
-<nav class="bottom-nav">
-  <button
-    class="nav-btn active"
-    onclick="showSection('discover',this)"
-  >
-    <span>⌕</span>Discover
-  </button>
-
-  <button
-    class="nav-btn"
-    onclick="showSection('matches',this)"
-  >
-    <span>♡</span>Matches
-  </button>
-
-  <button
-    class="nav-btn"
-    onclick="showSection('chats',this)"
-  >
-    <span>▤</span>Chats
-  </button>
-
-  <button
-    class="nav-btn"
-    onclick="showSection('profile',this)"
-  >
-    <span>♙</span>Profile
-  </button>
-  </nav>
+document.getElementById('signupForm').addEventListener(
+  'submit',
+  function(event) {
+    event.preventDefault();
+
+    document.getElementById('signupMessage').textContent =
+      'The form works, but online account creation still needs Firebase Authentication.';
+  }
+);
+</script>
+
+</body>
+</html>
